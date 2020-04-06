@@ -1,0 +1,16 @@
+.form-field{text-align: center;}
+.snackbar-wrap {
+    position: fixed;
+    right:35%;
+    top: 50%;
+    padding: 15px;
+    border-radius: 5px;
+    min-width: 20%;
+    transform-origin: center center;
+    transform: translate(0%, -50%);
+    justify-content: center;
+    z-index: 1050;
+  }
+  .snack-icon{padding-right:20px; font-size:30px;}
+  .snackbar-wrap .jsnack-msg{font-size: 16px; text-align: center;}
+  
