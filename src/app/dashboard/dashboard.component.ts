@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openProfile(data) {
-    this.router.navigate(['profile/' + data.id]);
+    this.router.navigate(['profile/' + data._id]);
   }
 
   logout(){

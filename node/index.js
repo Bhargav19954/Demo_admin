@@ -6,6 +6,7 @@ const port = 3000;
 const db = require('./controller');
 const validator = require('./validator');
 
+
 app.use(bodyParser.json());
 app.use(
     bodyParser.urlencoded({
@@ -22,9 +23,12 @@ app.get('/', (request, response) => {
 });
 
 
+
 app.get('/users', db.getUsers);
 app.get('/user/:id', db.getUserDetails);
 app.post('/login', validator.validateUser, db.login );
+
+
 
 
 

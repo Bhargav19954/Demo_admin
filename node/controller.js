@@ -1,38 +1,20 @@
 const { validationResult } = require('express-validator');
-const pool = require('./connection');
+const users = require('./connection')
 
 
 
 const getUsers = (request, response) => {
-    pool.query('SELECT id,first_name,last_name,city,mobile FROM users where is_admin = false', (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json({
-            code: 0,
-            data: results.rows
-        })
-    })
+    users.find({is_admin: false},{password : 0}).lean().exec(function(err,users){
+        if(err) throw err;
+
+        response.send({data:users})
+    });
 }
 
 const getUserDetails = (request, response) => {
-    pool.query('SELECT * FROM users where id =' + request.params.id, (error, results) => {
-        if (error) {
-            throw error
-        }
-        for (let i = 0; i < results.rows.length; i++) {
-            delete results.rows[i]['password']
-        }
-        if (results.rows.length > 0) {
-            response.status(200).json({
-                code: 0,
-                data: results.rows[0]
-            })
-        } else {
-            response.status(404).json({
-                message: 'User not found'
-            })
-        }
+    users.findOne({_id : request.params.id},{password : 0},function(err,users){
+        if(err) throw err;
+        response.send({data:users})
     })
 }
 
@@ -41,19 +23,16 @@ const login = (request, response) => {
     if (!errors.isEmpty()) {
         return response.status(422).send({ errors: errors.array() });
     }
-    let query = "SELECT * FROM users where email ='" + request.body.email + "' and password = '" + request.body.password + "'";
-    pool.query(query, (error, results) => {
-        if (error) {
+    users.findOne({email : request.body.email,password:request.body.password},{password : 0},function(err,users){
+        if (err) {
             response.status(401).send({
                 message: 'Bad request'
             })
         }
-        console.log(results)
-        if (results.rows.length > 0) {
-            delete results.rows[0]['password']
+        if (users) {
             response.status(200).send({
                 code: 0,
-                data: results.rows[0],
+                data: users,
                 message: 'success'
             })
         }
@@ -63,7 +42,8 @@ const login = (request, response) => {
             })
         }
 
-    })
+    })    
+       
 }
 
 

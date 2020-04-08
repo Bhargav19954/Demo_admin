@@ -1,11 +1,12 @@
-const Pool = require('pg').Pool
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true});
 
-const pool = new Pool({
-    user: 'vhxpzahw',
-    host: 'drona.db.elephantsql.com',
-    database: 'vhxpzahw',
-    password: 'LEITfP-WmTjD8iswr7dI_-K0ep_SNG1j',
-    port: 5432,
-})
+let Schema = mongoose.Schema;
 
-module.exports = pool;
+var mySchema = new Schema({
+    first_name : String
+},{strict:false});
+
+const users = mongoose.model('users',mySchema)
+
+module.exports = users;
